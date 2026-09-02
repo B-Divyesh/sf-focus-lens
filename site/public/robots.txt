@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://focus-lens.sociobot.in/sitemap.xml

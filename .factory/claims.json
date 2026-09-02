@@ -1,0 +1,51 @@
+[
+  {
+    "id": "visible-focus",
+    "claim": "Adds a large high-contrast focus rail.",
+    "where": "landing preview and extension panel",
+    "test": "npm test -- --grep @claim:visible-focus",
+    "sandbox": "fresh browser context at /demo; focus the sample search control and inspect its rail"
+  },
+  {
+    "id": "reading-lane",
+    "claim": "Shows and hides a temporary reading lane.",
+    "where": "landing page and demo",
+    "test": "npm test -- --grep @claim:reading-lane",
+    "sandbox": "fresh browser context at /demo; toggle the reading lane"
+  },
+  {
+    "id": "site-view",
+    "claim": "Saves zoom and contrast settings for each site.",
+    "where": "landing page, extension panel, and README",
+    "test": "npm test -- --grep @claim:site-view",
+    "sandbox": "fresh browser context at /demo; change zoom and contrast, reload, and inspect the demo namespace"
+  },
+  {
+    "id": "named-waypoints",
+    "claim": "Saves and opens named keyboard waypoints.",
+    "where": "landing page, demo, and README",
+    "test": "npm test -- --grep @claim:named-waypoints",
+    "sandbox": "fresh browser context at /demo; create a waypoint and use it to focus the sample control"
+  },
+  {
+    "id": "shortcut-export",
+    "claim": "Exports the shortcut sheet as a text file.",
+    "where": "extension panel, demo, and README",
+    "test": "npm test -- --grep @claim:shortcut-export",
+    "sandbox": "fresh browser context at /demo; download and inspect the text file"
+  },
+  {
+    "id": "local-private",
+    "claim": "Settings stay in your browser and the product makes no third-party runtime requests.",
+    "where": "landing page, privacy page, and README",
+    "test": "npm test -- --grep @claim:local-private",
+    "sandbox": "fresh browser context at /demo; record requests during settings and waypoint changes"
+  },
+  {
+    "id": "no-account-free",
+    "claim": "Works without an account and core features are free.",
+    "where": "landing first screen and README",
+    "test": "npm test -- --grep @claim:no-account-free",
+    "sandbox": "fresh browser context at /demo; verify the complete controls have no account gate and the extension downloads"
+  }
+]
