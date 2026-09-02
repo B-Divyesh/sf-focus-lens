@@ -101,7 +101,9 @@ legend { font-weight: 750; }
 .demo-waypoints li { display: grid; grid-template-columns: 1fr auto; gap: 7px; margin-top: 7px; }
 .demo-waypoints li button:first-child { text-align: left; }
 .demo-waypoints .remove-waypoint { border-color: #8f2f27; background: transparent; color: #8f2f27; }
-.empty-state, .status { color: var(--muted); font-size: .88rem; }
+.empty-state, .status, .help-text { color: var(--muted); font-size: .88rem; }
+.help-text { margin: 4px 0 8px; }
+.validation-error { margin: 8px 0 0; color: var(--clay); font-weight: 750; }
 .sample-app { border-radius: 12px 34px 12px 34px; overflow: hidden; }
 .sample-app-bar { min-height: 54px; padding: 12px 20px; display: flex; justify-content: space-between; background: #18302f; color: white; }
 .sample-body { position: relative; min-height: 650px; display: grid; grid-template-columns: 180px minmax(0, 1fr); overflow: hidden; }

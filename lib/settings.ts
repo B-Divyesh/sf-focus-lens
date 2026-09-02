@@ -30,6 +30,9 @@ export const clampZoom = (value: number): number => Math.min(200, Math.max(80, M
 
 export const storageKey = (origin: string): string => `site:${origin}`;
 
+export const validateWaypointName = (value: string): string | null =>
+  value.trim() ? null : 'Enter a waypoint name, then save it.';
+
 export const mergeSettings = (value?: Partial<SiteSettings>): SiteSettings => ({
   ...DEFAULT_SETTINGS,
   ...value,

@@ -35,6 +35,18 @@ test('@claim:named-waypoints saves and opens a named control', async ({ page }) 
   await expect(page.locator('#sample-open')).toBeFocused();
 });
 
+test('@regression:waypoint-validation explains and announces a missing waypoint name', async ({ page }) => {
+  await page.goto('/demo');
+  const input = page.getByLabel('Waypoint name');
+  await page.getByRole('button', { name: 'Save waypoint' }).click();
+  await expect(input).toHaveAttribute('aria-invalid', 'true');
+  await expect(page.locator('#demo-waypoint-error')).toHaveText('Enter a waypoint name, then save it.');
+  await input.fill('Queue filter');
+  await expect(input).toHaveAttribute('aria-invalid', 'false');
+  await page.getByRole('button', { name: 'Save waypoint' }).click();
+  await expect(page.getByRole('button', { name: 'Queue filter', exact: true })).toBeVisible();
+});
+
 test('@claim:shortcut-export downloads a readable shortcut sheet', async ({ page }) => {
   await page.goto('/demo');
   const downloadEvent = page.waitForEvent('download');

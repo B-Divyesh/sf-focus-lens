@@ -1,4 +1,5 @@
 import './style.css';
+import { validateWaypointName } from '../../lib/settings';
 
 type DemoSettings = {
   zoom: number;
@@ -118,7 +119,7 @@ function renderDemo() {
           <label class="check-label"><input id="demo-focus" type="checkbox" ${state.focus ? 'checked' : ''}/>Show the focus rail</label>
           <label class="check-label"><input id="demo-lane" type="checkbox" ${state.lane ? 'checked' : ''}/>Show the reading lane</label>
           <h3>Named waypoints</h3>
-          <form id="demo-waypoint-form"><label for="demo-waypoint">Waypoint name</label><div class="input-row"><input id="demo-waypoint" required maxlength="40"/><button>Save waypoint</button></div></form>
+          <form id="demo-waypoint-form" novalidate><label for="demo-waypoint">Waypoint name <span aria-hidden="true">(required)</span></label><p id="demo-waypoint-guidance" class="help-text">Required. Enter a name for the focused sample control.</p><div class="input-row"><input id="demo-waypoint" required maxlength="40" aria-describedby="demo-waypoint-guidance demo-waypoint-error"/><button>Save waypoint</button></div><p id="demo-waypoint-error" class="validation-error" role="alert" hidden></p></form>
           <ul id="demo-waypoints" class="demo-waypoints">${state.waypoints.map((name, index) => `<li><button data-waypoint="${index}">${escapeText(name)}</button><button class="remove-waypoint" data-remove="${index}" aria-label="Remove ${escapeText(name)}">Remove</button></li>`).join('')}</ul>
           ${state.waypoints.length ? '' : '<p class="empty-state">Saved sample controls will appear here. Name one above to add it.</p>'}
           <button id="demo-export" class="button secondary">Export shortcuts</button>
@@ -150,7 +151,26 @@ function bindDemo(state: DemoSettings) {
   document.querySelectorAll<HTMLInputElement>('input[name="demo-contrast"]').forEach((input) => input.addEventListener('change', () => { state.contrast = input.value as DemoSettings['contrast']; persist(); renderDemo(); }));
   document.querySelector<HTMLInputElement>('#demo-focus')!.addEventListener('change', (event) => { state.focus = (event.target as HTMLInputElement).checked; persist(); renderDemo(); });
   document.querySelector<HTMLInputElement>('#demo-lane')!.addEventListener('change', (event) => { state.lane = (event.target as HTMLInputElement).checked; persist(); renderDemo(); });
-  document.querySelector<HTMLFormElement>('#demo-waypoint-form')!.addEventListener('submit', (event) => { event.preventDefault(); const input = document.querySelector<HTMLInputElement>('#demo-waypoint')!; state.waypoints.push(input.value.trim()); persist(); renderDemo(); });
+  const waypointInput = document.querySelector<HTMLInputElement>('#demo-waypoint')!;
+  const setWaypointError = (message: string | null) => {
+    const error = document.querySelector<HTMLElement>('#demo-waypoint-error')!;
+    waypointInput.setAttribute('aria-invalid', String(Boolean(message)));
+    error.textContent = message || '';
+    error.hidden = !message;
+  };
+  document.querySelector<HTMLFormElement>('#demo-waypoint-form')!.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const validationMessage = validateWaypointName(waypointInput.value);
+    setWaypointError(validationMessage);
+    if (validationMessage) {
+      waypointInput.focus();
+      return;
+    }
+    state.waypoints.push(waypointInput.value.trim());
+    persist();
+    renderDemo();
+  });
+  waypointInput.addEventListener('input', () => setWaypointError(null));
   document.querySelectorAll<HTMLButtonElement>('[data-remove]').forEach((button) => button.addEventListener('click', () => { state.waypoints.splice(Number(button.dataset.remove), 1); persist(); renderDemo(); }));
   document.querySelectorAll<HTMLButtonElement>('[data-waypoint]').forEach((button) => button.addEventListener('click', () => { const target = Number(button.dataset.waypoint) === 0 ? '#sample-search' : '#sample-open'; document.querySelector<HTMLElement>(target)?.focus(); document.querySelector('#demo-status')!.textContent = `Opened ${button.textContent}.`; }));
   document.querySelector('#reset-demo')!.addEventListener('click', () => { localStorage.removeItem(DEMO_KEY); renderDemo(); });

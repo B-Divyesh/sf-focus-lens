@@ -1,4 +1,5 @@
 import { installFocusLens } from '../lib/page-agent';
+import { defineBackground } from 'wxt/utils/define-background';
 
 export default defineBackground(() => {
   chrome.commands.onCommand.addListener(async (command) => {

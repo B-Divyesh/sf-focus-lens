@@ -46,10 +46,11 @@
 
       <section aria-labelledby="waypoints-heading">
         <h2 id="waypoints-heading">Named waypoints</h2>
-        <p class="help">Focus a page control. Name it here, then save it.</p>
-        <form id="waypoint-form">
-          <label for="waypoint-name">Waypoint name</label>
-          <div class="form-row"><input id="waypoint-name" maxlength="40" required /><button type="submit">Save focus</button></div>
+        <p id="waypoint-guidance" class="help">Required. Focus a page control, enter a name, then save it.</p>
+        <form id="waypoint-form" novalidate>
+          <label for="waypoint-name">Waypoint name <span aria-hidden="true">(required)</span></label>
+          <div class="form-row"><input id="waypoint-name" maxlength="40" required aria-describedby="waypoint-guidance waypoint-error" /><button type="submit">Save focus</button></div>
+          <p id="waypoint-error" class="validation-error" role="alert" hidden></p>
         </form>
         <p id="empty-waypoints" class="empty">Saved controls for this site will appear here.</p>
         <ul id="waypoint-list" class="waypoint-list"></ul>

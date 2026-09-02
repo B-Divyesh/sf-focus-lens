@@ -1,5 +1,4 @@
 {
-  "extends": "./.wxt/tsconfig.json",
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
@@ -10,5 +9,5 @@
     "types": ["chrome", "vitest/globals"],
     "skipLibCheck": true
   },
-  "include": ["entrypoints", "lib", "site", "tests", "wxt.config.ts", ".wxt/**/*.d.ts"]
+  "include": ["entrypoints", "lib", "site", "tests", "wxt.config.ts"]
 }

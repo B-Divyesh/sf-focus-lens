@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { clampZoom, mergeSettings, storageKey } from '../lib/settings';
+import { clampZoom, mergeSettings, storageKey, validateWaypointName } from '../lib/settings';
 
 describe('site settings', () => {
   it('keeps zoom within the supported range', () => {
@@ -15,5 +15,10 @@ describe('site settings', () => {
 
   it('uses one local key for each origin', () => {
     expect(storageKey('https://work.example')).toBe('site:https://work.example');
+  });
+
+  it('requires a named waypoint with recoverable guidance', () => {
+    expect(validateWaypointName('   ')).toBe('Enter a waypoint name, then save it.');
+    expect(validateWaypointName('Review search')).toBeNull();
   });
 });

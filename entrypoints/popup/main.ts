@@ -1,5 +1,5 @@
 import './style.css';
-import { DEFAULT_SETTINGS, mergeSettings, shortcutsText, storageKey, type SiteSettings, type Waypoint } from '../../lib/settings';
+import { DEFAULT_SETTINGS, mergeSettings, shortcutsText, storageKey, validateWaypointName, type SiteSettings, type Waypoint } from '../../lib/settings';
 import { installFocusLens } from '../../lib/page-agent';
 
 const $ = <T extends HTMLElement>(selector: string): T => document.querySelector(selector) as T;
@@ -10,6 +10,14 @@ let settings: SiteSettings = { ...DEFAULT_SETTINGS, waypoints: [] };
 const error = (message: string) => {
   const box = $('#error');
   box.textContent = message;
+  box.hidden = !message;
+};
+
+const waypointError = (message: string | null) => {
+  const input = $('#waypoint-name') as HTMLInputElement;
+  const box = $('#waypoint-error');
+  input.setAttribute('aria-invalid', String(Boolean(message)));
+  box.textContent = message || '';
   box.hidden = !message;
 };
 
@@ -94,14 +102,22 @@ async function init() {
     event.preventDefault();
     error('');
     const input = $('#waypoint-name') as HTMLInputElement;
+    const validationMessage = validateWaypointName(input.value);
+    waypointError(validationMessage);
+    if (validationMessage) {
+      input.focus();
+      return;
+    }
     const result = await send({ type: 'FOCUS_LENS_CAPTURE' });
     if (!result?.ok) return error(result?.error || 'Focus a page control, then try again.');
     const waypoint: Waypoint = { id: crypto.randomUUID(), name: input.value.trim(), selector: result.selector };
     settings.waypoints.push(waypoint);
     input.value = '';
+    waypointError(null);
     await save();
     render();
   });
+  $('#waypoint-name').addEventListener('input', () => waypointError(null));
   $('#export-shortcuts').addEventListener('click', () => {
     const url = URL.createObjectURL(new Blob([shortcutsText], { type: 'text/plain' }));
     const link = document.createElement('a');

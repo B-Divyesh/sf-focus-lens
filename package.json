@@ -10,9 +10,10 @@
     "build:extension": "wxt build && node scripts/package-extension.mjs",
     "build:site": "node scripts/clean-dist.mjs && npm run build:extension && npm run build:web",
     "build:web": "vite build --config site/vite.config.ts",
-    "test": "vitest run tests/settings.test.ts && playwright test",
-    "test:unit": "vitest run tests/settings.test.ts",
-    "test:e2e": "playwright test"
+    "test": "vitest run tests/settings.test.ts tests/release-regressions.test.ts && playwright test",
+    "test:unit": "vitest run tests/settings.test.ts tests/release-regressions.test.ts",
+    "test:e2e": "playwright test",
+    "test:clean-claims": "node scripts/clean-claims.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",

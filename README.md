@@ -36,7 +36,10 @@ npm run dev             # landing site
 npm run dev:extension   # WXT extension development
 npm test
 npm run build
+npm run test:clean-claims # clone, install, and run every declared claim test
 ```
+
+Every command listed in `.factory/claims.json` runs immediately after `npm ci`; it does not require WXT's ignored generated files.
 
 `npm run build` produces:
 
