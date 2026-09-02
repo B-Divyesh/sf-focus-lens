@@ -1,72 +1,44 @@
-# Focus Lens polish round 1 handoff
+# Focus Lens independent verification 4 handoff — PASS
 
-- Work order: `focus-lens-polish-1`
-- Role: repair
-- Repaired candidate: `40e564d136bb72b5baf47f9dd3fdb81b62d4a7ff`
-- Repair code commit: `ce24e10`
+- Candidate: `b77546943dd0d92d58a8e702a622cf05011442e9`
 - Live URL: https://focus-lens.sociobot.in
 - Demo URL: https://focus-lens.sociobot.in/?demo=1
-- Finding map: [`.factory/polish-1.md`](polish-1.md)
+- Work order: `focus-lens-verify-4`
+- Full report: [`.factory/verification-4.md`](verification-4.md)
 
-## What changed
+## Result
 
-- Resolved all 29 findings from `.factory/review-1.md`.
-- Rebuilt demo waypoints around exact saved control selectors, with removal and reload stability.
-- Added independent Atlas and Ledger sample-site state plus demo controls for rail width and color.
-- Put Morgan Lee, the visible focus rail, and the reading lane inside the first 390 × 844 demo screen.
-- Made sample search and record actions work.
-- Added the isolated `/?demo=1` entry, persistent banner, targeted Reset, and installation exit.
-- Added `/install`, clear Developer mode instructions, and `INSTALL.txt` inside the public ZIP.
-- Added route-specific static and runtime metadata, routed focus/announcements, and a true 404 using the standard shell.
-- Rewrote every flagged sentence while retaining the glacial ceramic visual system and original generated art.
-- Expanded `.factory/claims.json` to 13 observable claims and committed a packaged MV3 integration harness.
-- Upgraded and pinned vulnerable development tools. The full production and development audit is clean.
+**PASS.** All 13 exact claim commands pass from a clean clone, the full local suite/typecheck/build/audit pass, the packaged MV3 extension works in its fresh-profile harness, and the live site plus extracted extension package match the candidate. No critical, high, medium, or low release defect was found.
 
-## How to run
+## Verification summary
+
+- First read: the live first screen states what Focus Lens does, names low-vision workers, and shows **Try it with sample data** without scrolling. The one-click demo immediately shows a realistic case, focus rail, and reading lane.
+- Claims: 13/13 passed independently after `npm ci`; `npm run test:clean-claims` repeated them from a new temporary clone.
+- Full suite: 11 Vitest and 22 Playwright checks passed; 19/19 site checks also passed against production.
+- Build: `npx tsc --noEmit`, `npm run build`, ZIP integrity, and `npm audit --audit-level=low` passed.
+- Accessibility: zero serious/critical Axe findings across all routes and the popup; keyboard focus, reduced motion, 390 px layout, 200% text, targets, landmarks, and errors passed.
+- Privacy: demo controls issue zero post-load requests; only same-origin files load; the demo namespace, Chrome storage, reset boundary, and no-page-text behavior passed.
+- Deployment: local HTML, JS, CSS, and hero hashes match live. Extracted local and live ZIP contents match byte-for-byte.
+- Performance: 21,431 B JS, 15,541 B CSS, 38,506 B hero. Live Lighthouse scored 100 in Performance, Accessibility, Best Practices, and SEO; LCP 1,069 ms, TBT 17 ms, CLS 0.
+- Headers/routing: security headers and immutable asset caching are live; known routes return 200 and the designed unknown route returns 404.
+
+## How to reproduce
 
 ```sh
 npm ci
-npm run dev
-npm run dev:extension
-npm test
-npm run test:extension
-npm run build
 npm run test:clean-claims
+npm test
+npx tsc --noEmit
+npm run build
+npm audit --audit-level=low
+PLAYWRIGHT_BASE_URL=https://focus-lens.sociobot.in npx playwright test tests/e2e/site.spec.ts
 ```
 
-Load `dist/extension` through Chrome's **Load unpacked** action for a manual toolbar check. The public `/install` route and packaged `INSTALL.txt` contain the same steps.
+## Findings and remaining work
 
-## Verification evidence
-
-- Clean clone: `npm run test:clean-claims` passed all 13 declared commands after `npm ci` and before any manual build.
-- Full suite: 11 Vitest unit/regression checks and 22 Playwright browser checks passed.
-- Extension integration: the packaged MV3 popup ran in a fresh Chromium profile against a real HTTP tab. It wrote all settings and a selector-backed waypoint to real `chrome.storage.local`.
-- Page-agent integration: capture, restore, rail/lane commands, and 80–200% zoom bounds passed.
-- Accessibility: Axe reported no serious or critical issue on all routes or the extension popup. Keyboard focus, 44 px targets, reduced motion, and 200% text passed.
-- Privacy: the exercised demo flow made zero post-load requests. Reset removed only `demo:focus-lens:settings` and kept a real-data sentinel.
-- Routing: each source route has unique metadata. History navigation focuses and announces headings. Unknown routes use the standard shell with HTTP 404.
-- Packaging: `npm run build`, `npx tsc --noEmit`, and ZIP integrity passed.
-- Dependencies: `npm audit --audit-level=low` reports 0 vulnerabilities.
-- Budgets: site JavaScript 21,431 B; CSS 15,541 B; hero 38,506 B.
-- Local Lighthouse mobile: 100 Performance, 100 Accessibility, 100 Best Practices, 100 SEO; FCP 1.1 s, LCP 1.4 s, TBT 70 ms, CLS 0.
-- Live Lighthouse mobile: 100 Performance, 100 Accessibility, 100 Best Practices, 100 SEO; FCP 0.8 s, LCP 1.1 s, TBT 50 ms, CLS 0.
-- Local URL verifier: passed title, language, one `h1`, one `main`, alt text, button names, and console checks.
-- Visual evidence: `.factory/polish-artifacts/mobile-demo.png`, `desktop-home.png`, `desktop-demo.png`, `extension-popup.png`, and `not-found.png`.
-- Offline: not applicable because the extension makes no offline/PWA claim and the site has no service worker.
-
-## Deployment and live recheck
-
-- Pushed `ce24e10` and `e20bef5` to `origin/main`.
-- Deployed `dist/site` to the existing in-scope `sf-focus-lens` Static Web App with the factory deployment script.
-- Cold-opened https://focus-lens.sociobot.in/?demo=1 at 390 × 844. Morgan Lee, Atlas CRM, Needs review, the 6 px rail, and reading lane are in the first screen.
-- Ran all 19 site/browser tests against production; all passed.
-- Ran the fleet URL verifier against production; title, language, landmarks, alt text, controls, and console checks passed.
-- Confirmed `/`, `/demo`, `/install`, `/privacy`, and `/terms` return 200. Unknown paths return the standard shell with HTTP 404.
-- Downloaded the live ZIP, passed its integrity check, and matched every extracted file to `dist/extension`.
-- Recorded only same-origin cold requests and zero console/page errors.
-- Confirmed immutable cache and security headers on the live hashed JavaScript.
-- Evidence is under `.factory/polish-artifacts/verify-live/` plus `live-mobile-demo.png`, `live-install.png`, `live-cold-check.json`, and `lighthouse-live.json`.
-
-## Known gaps
-
-None.
+- Critical: none.
+- High: none.
+- Medium: none.
+- Low: none.
+- Product code changes during verification: none.
+- Remaining release work: none.
