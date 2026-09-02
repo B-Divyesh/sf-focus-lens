@@ -1,37 +1,62 @@
-# Focus Lens adversarial review handoff
+# Focus Lens polish round 1 handoff
 
-- Work order: `focus-lens-review-1`
-- Role: reviewer
-- Verdict: **FAIL**
-- Reviewed commit: `61c43511a201f5205f6443f375b8172fda7c5acd`
+- Work order: `focus-lens-polish-1`
+- Role: repair
+- Repaired candidate: `40e564d136bb72b5baf47f9dd3fdb81b62d4a7ff`
+- Repair code commit: `ce24e10`
 - Live URL: https://focus-lens.sociobot.in
-- Full report: [`.factory/review-1.md`](review-1.md)
+- Demo URL: https://focus-lens.sociobot.in/?demo=1
+- Finding map: [`.factory/polish-1.md`](polish-1.md)
 
-## What was done
+## What changed
 
-- Reviewed the live site cold at 390 × 844 and 1440 × 900.
-- Audited every landing-page and README copy unit with word counts and proposed rewrites for each flag.
-- Exercised the live demo, storage isolation, Reset, request log, waypoint behavior, downloads, routing, Back, focus movement, metadata, 404, touch sizing, 200% text, and link health.
-- Read the brief, design, claims, demo notes, current handoff, and all retained earlier verification reports.
-- Ran all ten exact claim commands from a fresh clone.
-- Ran the complete test, typecheck, build, ZIP-integrity, production dependency audit, live Axe, and fleet URL checks.
-- Reviewed missed leverage and confirmed that AI and cloud sync are not appropriate for this local-only product.
+- Resolved all 29 findings from `.factory/review-1.md`.
+- Rebuilt demo waypoints around exact saved control selectors, with removal and reload stability.
+- Added independent Atlas and Ledger sample-site state plus demo controls for rail width and color.
+- Put Morgan Lee, the visible focus rail, and the reading lane inside the first 390 × 844 demo screen.
+- Made sample search and record actions work.
+- Added the isolated `/?demo=1` entry, persistent banner, targeted Reset, and installation exit.
+- Added `/install`, clear Developer mode instructions, and `INSTALL.txt` inside the public ZIP.
+- Added route-specific static and runtime metadata, routed focus/announcements, and a true 404 using the standard shell.
+- Rewrote every flagged sentence while retaining the glacial ceramic visual system and original generated art.
+- Expanded `.factory/claims.json` to 13 observable claims and committed a packaged MV3 integration harness.
+- Upgraded and pinned vulnerable development tools. The full production and development audit is clean.
 
-## Verification results
+## How to run
 
-- All ten declared claim commands exited 0, but the claim gate is not accepted because several tests do not prove their claim text.
-- `npm test`: pass, 10 Vitest tests and 15 Playwright tests.
-- `npx tsc --noEmit`: pass.
-- `npm run build`: pass.
-- ZIP integrity: pass.
-- Production dependency audit: pass.
-- Live Axe and `verify-url.sh`: pass.
-- Link crawl: pass.
-- Demo storage sentinel and Reset: pass.
-- Post-load demo requests: zero.
+```sh
+npm ci
+npm run dev
+npm run dev:extension
+npm test
+npm run test:extension
+npm run build
+npm run test:clean-claims
+```
 
-## What remains
+Load `dist/extension` through Chrome's **Load unpacked** action for a manual toolbar check. The public `/install` route and packaged `INSTALL.txt` contain the same steps.
 
-The report records 29 findings. Blocking issues include the absent first-screen sample on mobile, hard-coded waypoint simulation, incomplete claim coverage, unresolved development dependency advisories, and the missing repeatable real-extension integration test. High and medium issues cover installation, inert demo controls, 404 structure, route metadata, desktop first-screen facts, and route focus. Minor findings cover the remaining copy violations.
+## Verification evidence
 
-No product code was modified. Only this handoff and `.factory/review-1.md` were added or updated for the review.
+- Clean clone: `npm run test:clean-claims` passed all 13 declared commands after `npm ci` and before any manual build.
+- Full suite: 11 Vitest unit/regression checks and 22 Playwright browser checks passed.
+- Extension integration: the packaged MV3 popup ran in a fresh Chromium profile against a real HTTP tab. It wrote all settings and a selector-backed waypoint to real `chrome.storage.local`.
+- Page-agent integration: capture, restore, rail/lane commands, and 80–200% zoom bounds passed.
+- Accessibility: Axe reported no serious or critical issue on all routes or the extension popup. Keyboard focus, 44 px targets, reduced motion, and 200% text passed.
+- Privacy: the exercised demo flow made zero post-load requests. Reset removed only `demo:focus-lens:settings` and kept a real-data sentinel.
+- Routing: each source route has unique metadata. History navigation focuses and announces headings. Unknown routes use the standard shell with HTTP 404.
+- Packaging: `npm run build`, `npx tsc --noEmit`, and ZIP integrity passed.
+- Dependencies: `npm audit --audit-level=low` reports 0 vulnerabilities.
+- Budgets: site JavaScript 21,431 B; CSS 15,541 B; hero 38,506 B.
+- Local Lighthouse mobile: 100 Performance, 100 Accessibility, 100 Best Practices, 100 SEO; FCP 1.1 s, LCP 1.4 s, TBT 70 ms, CLS 0.
+- Local URL verifier: passed title, language, one `h1`, one `main`, alt text, button names, and console checks.
+- Visual evidence: `.factory/polish-artifacts/mobile-demo.png`, `desktop-home.png`, `desktop-demo.png`, `extension-popup.png`, and `not-found.png`.
+- Offline: not applicable because the extension makes no offline/PWA claim and the site has no service worker.
+
+## Deployment and live recheck
+
+The production deployment and cold live verification are recorded in the final evidence commit for this work order.
+
+## Known gaps
+
+None.
