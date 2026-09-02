@@ -34,4 +34,11 @@ npm run test:clean-claims        # all 10 exact claim commands in a clean clone
 
 ## Deployment and follow-up
 
-The repair is committed locally and ready to push/deploy. After deployment, confirm live route status, the visible radio focus ring, and static asset parity. There are no known product gaps; offline/update checks do not apply because this remains a non-PWA static landing site and extension with no service worker for the site.
+Deployed to the existing `sf-focus-lens` Static Web App on 2026-09-02. Live checks at `https://focus-lens.sociobot.in` confirmed:
+
+- `/demo` returns HTTP 200 and an unknown path returns the designed static document with HTTP 404.
+- The live demo's opacity-zero Strong radio has `:focus-visible=true`; its visible label computes a 4 px `rgb(198, 61, 47)` outline. There were no browser console errors.
+- At 390 px, the demo has no horizontal overflow and every visible standalone link is at least 44 px high.
+- Live JS, CSS, and the downloadable ZIP have exact SHA-256 matches with the local production build. The deployed CSP, referrer policy, nosniff header, and immutable asset caching are present.
+
+There are no known product gaps. Offline/update checks do not apply because this remains a non-PWA static landing site and extension with no site service worker.
