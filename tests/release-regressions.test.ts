@@ -10,7 +10,7 @@ describe('release regression guards', () => {
     expect(JSON.stringify(tsconfig)).not.toContain('.wxt/tsconfig.json');
     expect(tsconfig.include).not.toContain('.wxt/**/*.d.ts');
     expect(packageJson.scripts.test).toContain('vitest run');
-    expect(claims).toHaveLength(10);
+    expect(claims).toHaveLength(13);
     for (const claim of claims) {
       expect(claim.test).toBe(`npm test -- --grep @claim:${claim.id}`);
     }
@@ -30,7 +30,14 @@ describe('release regression guards', () => {
     const routes = config.routes.filter((route: { rewrite?: string }) => route.rewrite === '/index.html').map((route: { route: string }) => route.route);
 
     expect(config.navigationFallback).toBeUndefined();
-    expect(routes).toEqual(['/demo', '/privacy', '/terms', '/404']);
+    expect(routes).toEqual([]);
+    expect(config.routes).toEqual(expect.arrayContaining([
+      { route: '/demo', rewrite: '/demo/index.html' },
+      { route: '/install', rewrite: '/install/index.html' },
+      { route: '/privacy', rewrite: '/privacy/index.html' },
+      { route: '/terms', rewrite: '/terms/index.html' },
+      { route: '/404', rewrite: '/404.html' }
+    ]));
     expect(config.responseOverrides['404']).toEqual({ rewrite: '/404.html' });
   });
 
@@ -68,5 +75,15 @@ describe('release regression guards', () => {
     }
     expect(popupCode).toContain('validateWaypointName');
     expect(demo).toContain('validateWaypointName');
+  });
+
+  it('builds route-specific source metadata and one shared 404 shell', async () => {
+    const generator = await readFile('scripts/create-route-pages.mjs', 'utf8');
+    const main = await readFile('site/src/main.ts', 'utf8');
+    expect(generator).toContain("['demo', 'Demo — Focus Lens'");
+    expect(generator).toContain("['privacy', 'Privacy — Focus Lens'");
+    expect(generator).toContain("['404', 'Page not found — Focus Lens'");
+    expect(main).toContain('const shell =');
+    expect(main).toContain("app.innerHTML = shell(`<main id=\"main\" class=\"not-found\"");
   });
 });

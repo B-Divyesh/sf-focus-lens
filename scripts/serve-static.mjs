@@ -4,7 +4,14 @@ import { createServer } from 'node:http';
 import { extname, normalize, resolve, sep } from 'node:path';
 
 const root = resolve(process.cwd(), 'dist/site');
-const knownAppRoutes = new Set(['/', '/demo', '/privacy', '/terms', '/404']);
+const routeFiles = new Map([
+  ['/', 'index.html'],
+  ['/demo', 'demo/index.html'],
+  ['/install', 'install/index.html'],
+  ['/privacy', 'privacy/index.html'],
+  ['/terms', 'terms/index.html'],
+  ['/404', '404.html']
+]);
 const mimeTypes = {
   '.avif': 'image/avif', '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8', '.png': 'image/png',
@@ -24,7 +31,7 @@ function sendFile(response, file, status = 200) {
 
 const server = createServer(async (request, response) => {
   const pathname = new URL(request.url || '/', 'http://127.0.0.1').pathname;
-  if (knownAppRoutes.has(pathname)) return sendFile(response, resolve(root, 'index.html'));
+  if (routeFiles.has(pathname)) return sendFile(response, resolve(root, routeFiles.get(pathname)));
   const candidate = localFile(pathname);
   if (candidate && existsSync(candidate) && (await stat(candidate)).isFile()) return sendFile(response, candidate);
   return sendFile(response, resolve(root, '404.html'), 404);

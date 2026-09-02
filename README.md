@@ -1,30 +1,35 @@
 # Focus Lens
 
-Focus Lens is a free Chrome extension for low-vision knowledge workers who use dense browser applications. It adds a large focus rail, a temporary reading lane, per-site zoom and contrast settings, named keyboard waypoints, and an exportable shortcut sheet.
+Focus Lens is a free Chrome extension for low-vision workers who use dense browser applications.
 
-All settings stay in Chrome extension storage. After its local page loads, Focus Lens controls make no network requests, so no data leaves while you use them. A waypoint stores the name you enter and a control selector, never page text.
+It adds a focus rail, reading lane, and per-site zoom and contrast settings. You can change the rail width and color. You can also save waypoints and export a shortcut sheet.
 
-Try the isolated sample at [focus-lens.sociobot.in/demo](https://focus-lens.sociobot.in/demo). Demo changes use the separate `demo:focus-lens:settings` browser key and can be reset from the banner.
+Settings and waypoints stay under each site's key in Chrome storage. A waypoint stores your name and the control's structural location. It does not store page text. Focus Lens controls make no network requests after their local files load.
+
+Try the isolated sample at [focus-lens.sociobot.in/?demo=1](https://focus-lens.sociobot.in/?demo=1). Demo changes use only `demo:focus-lens:settings`. **Reset demo** removes that key without changing other browser data.
 
 ## Install the packaged extension
 
-1. Run `npm ci && npm run build`.
-2. Open `chrome://extensions`.
+The public [installation page](https://focus-lens.sociobot.in/install) provides the current ZIP and the same steps below. The ZIP also contains `INSTALL.txt`.
+
+1. Download and extract `focus-lens-chrome.zip`.
+2. Open `chrome://extensions` in Chrome.
 3. Turn on **Developer mode**.
 4. Select **Load unpacked**.
-5. Choose `dist/extension`.
+5. Choose the extracted folder that contains `manifest.json`.
+6. Pin Focus Lens and open its toolbar button on a regular web page.
 
-Open the Focus Lens toolbar button on a regular web page. The extension uses `activeTab`, `scripting`, and `storage`. It does not request access to every site in advance.
+The extension requests only `activeTab`, `scripting`, and `storage`. It does not request host permissions.
 
 ## Use Focus Lens
 
-- Set zoom, contrast, focus width, and focus color for the current site.
+- Set zoom, contrast, focus rail width, and focus rail color for the current site.
 - Turn the reading lane on while scanning a dense page.
-- Focus a useful page control, enter a waypoint name, then select **Save focus**.
-- Open a saved waypoint from the panel.
-- Export the keyboard shortcut sheet from the panel.
+- Focus a page control, enter a waypoint name, then select **Save focus**.
+- Open a waypoint to return to that exact control.
+- Export the four-command shortcut sheet from the panel.
 
-Keyboard commands toggle the focus rail and reading lane or change page zoom. Chrome may reserve some shortcuts. Change extension shortcuts at `chrome://extensions/shortcuts` if needed.
+The packaged commands toggle the focus rail and reading lane or change zoom between 80% and 200%.
 
 ## Develop and test
 
@@ -32,26 +37,29 @@ Requirements: Node.js 20 or later, npm, and Chromium for Playwright.
 
 ```sh
 npm ci
-npm run dev             # landing site
-npm run dev:extension   # WXT extension development
+npm run dev
+npm run dev:extension
 npm test
+npm run test:extension
 npm run build
-npm run test:clean-claims # clone, install, and run every declared claim test
+npm run test:clean-claims
 ```
 
-Every command listed in `.factory/claims.json` runs immediately after `npm ci`; it does not require WXT's ignored generated files.
+`npm test` runs unit, browser, accessibility, privacy, routing, and packaged-extension integration checks. `npm run test:extension` repeats the real-extension harness alone.
+
+Every command in `.factory/claims.json` runs from a clean clone. The harness supplies a real HTTP tab to the packaged popup. It also exercises the production page agent on that tab.
 
 `npm run build` produces:
 
-- `dist/extension/` — unpacked Manifest V3 extension.
-- `dist/site/` — static site with `index.html` at its root.
+- `dist/extension/` — unpacked Manifest V3 extension with `INSTALL.txt`.
+- `dist/site/` — static site and route documents.
 - `dist/site/downloads/focus-lens-chrome.zip` — packaged extension.
 
-The exact static deployment command is `npm run build:site`, but run `npm run build` when the downloadable extension also needs rebuilding.
+Deploy the static site with the factory configuration. The deployment command is `npm run build:site`, which also rebuilds the downloadable extension.
 
 ## Privacy and limits
 
-See `/privacy` and `/terms` on the deployed site. Focus Lens is not a screen-reader replacement and does not bypass site security. Test it with each workplace application before relying on it.
+Read the deployed [privacy page](https://focus-lens.sociobot.in/privacy) and [terms](https://focus-lens.sociobot.in/terms). Focus Lens does not replace a screen reader or an employer accommodation. Test it with each workplace application before relying on it.
 
 ## License
 

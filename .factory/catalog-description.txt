@@ -1,0 +1,1 @@
+Keep keyboard focus visible in dense web apps with per-site view controls and named waypoints.

@@ -1,72 +1,93 @@
 [
   {
     "id": "visible-focus",
-    "claim": "Adds a large high-contrast focus rail.",
-    "where": "landing preview and extension panel",
+    "claim": "Adds a large high-contrast focus rail with a pale halo.",
+    "where": "landing preview, demo, extension panel",
     "test": "npm test -- --grep @claim:visible-focus",
-    "sandbox": "fresh browser context at /demo; focus the sample search control and inspect its rail"
+    "sandbox": "fresh /demo context; inspect rail width, color, halo, and 3:1 boundaries on light and dark surfaces"
   },
   {
     "id": "reading-lane",
     "claim": "Shows and hides a temporary reading lane.",
-    "where": "landing page and demo",
+    "where": "landing, demo, extension panel",
     "test": "npm test -- --grep @claim:reading-lane",
-    "sandbox": "fresh browser context at /demo; toggle the reading lane"
+    "sandbox": "fresh /demo context; toggle the reading lane and assert its visible state"
   },
   {
     "id": "site-view",
-    "claim": "Saves zoom and contrast settings for each site.",
-    "where": "landing page, extension panel, and README",
+    "claim": "Keeps zoom, contrast, focus rail width, and focus color settings separate for each site.",
+    "where": "landing, demo, privacy, README",
     "test": "npm test -- --grep @claim:site-view",
-    "sandbox": "fresh browser context at /demo; change zoom and contrast, reload, and inspect the demo namespace"
+    "sandbox": "fresh /demo context; set different values for Atlas and Ledger, switch between them, reload, and inspect both namespaces"
   },
   {
     "id": "named-waypoints",
-    "claim": "Saves and opens named keyboard waypoints.",
-    "where": "landing page, demo, and README",
+    "claim": "Saves and opens the exact control chosen for each named waypoint.",
+    "where": "landing, demo, README",
     "test": "npm test -- --grep @claim:named-waypoints",
-    "sandbox": "fresh browser context at /demo; create a waypoint and use it to focus the sample control"
+    "sandbox": "fresh /demo context; save both sample controls, remove a seed, reload, and assert each name restores its stored selector"
   },
   {
     "id": "shortcut-export",
-    "claim": "Exports the shortcut sheet as a text file.",
-    "where": "extension panel, demo, and README",
+    "claim": "Exports all four keyboard shortcuts as a text file.",
+    "where": "demo, extension panel, README",
     "test": "npm test -- --grep @claim:shortcut-export",
-    "sandbox": "fresh browser context at /demo; download and inspect the text file"
+    "sandbox": "fresh /demo context; download and inspect the filename and all four shortcut rows"
   },
   {
-    "id": "local-private",
-    "claim": "Demo settings stay in an isolated browser-storage key and Reset demo removes that key.",
-    "where": "landing page, privacy page, and README",
-    "test": "npm test -- --grep @claim:local-private",
-    "sandbox": "fresh browser context at /demo; save a setting, inspect the demo namespace, then reset it"
+    "id": "demo-isolation",
+    "claim": "Demo changes use one separate namespace, cannot change extension data, and Reset removes only demo data.",
+    "where": "home helper, demo banner, README",
+    "test": "npm test -- --grep @claim:demo-isolation",
+    "sandbox": "fresh home context; open /?demo=1 in one click, add a real-data sentinel, change settings, reset, and assert only demo:focus-lens:settings is removed"
   },
   {
     "id": "no-egress",
-    "claim": "Focus Lens sends no data: after its local page loads, its controls make no network requests.",
-    "where": "privacy page and README",
+    "claim": "Focus Lens controls make no network requests after their local files load.",
+    "where": "landing, privacy, README",
     "test": "npm test -- --grep @claim:no-egress",
-    "sandbox": "fresh browser context at /demo; record every request after load while changing settings, saving a waypoint, and exporting shortcuts"
+    "sandbox": "fresh /demo context; record every request while changing settings, saving a waypoint, and exporting shortcuts"
   },
   {
     "id": "no-page-text-capture",
-    "claim": "Waypoints store the name you enter and a control selector, never page text.",
-    "where": "landing privacy section, privacy page, and README",
+    "claim": "Waypoints store a user-entered name and structural control location, not page text.",
+    "where": "landing, privacy, README",
     "test": "npm test -- --grep @claim:no-page-text-capture",
-    "sandbox": "fresh browser context at /demo; place a unique marker in sample page text, save a differently named waypoint, and inspect stored data"
+    "sandbox": "fresh /demo context; enter a unique page marker, save a waypoint, and inspect its stored name and selector"
   },
   {
     "id": "exact-permissions",
-    "claim": "The packaged extension requests only activeTab, scripting, and storage permissions.",
+    "claim": "The packaged extension requests only activeTab, scripting, and storage, with no host permissions.",
     "where": "README",
     "test": "npm test -- --grep @claim:exact-permissions",
-    "sandbox": "fresh browser context at /demo; inspect the manifest in the production extension directory and downloadable ZIP"
+    "sandbox": "inspect both the built extension manifest and downloadable ZIP manifest"
   },
   {
     "id": "no-account-free",
-    "claim": "Works without an account and core features are free.",
-    "where": "landing first screen and README",
+    "claim": "Focus Lens is free and works without an account.",
+    "where": "landing first screen, terms, README",
     "test": "npm test -- --grep @claim:no-account-free",
-    "sandbox": "fresh browser context at /demo; verify the complete controls have no account gate and the extension downloads"
+    "sandbox": "fresh /demo context; assert full controls and ZIP are available without account, password, checkout, or payment UI"
+  },
+  {
+    "id": "install-package",
+    "claim": "The downloadable ZIP includes the instructions needed to load the unpacked extension in Chrome Developer mode.",
+    "where": "install route, ZIP, README",
+    "test": "npm test -- --grep @claim:install-package",
+    "sandbox": "open /install and inspect INSTALL.txt inside the production ZIP for Developer mode, Load unpacked, and manifest guidance"
+  },
+  {
+    "id": "extension-storage",
+    "claim": "The packaged extension stores every setting and waypoint under the active site's Chrome storage key.",
+    "where": "landing facts, privacy, extension panel, README",
+    "test": "npm test -- --grep @claim:extension-storage",
+    "sandbox": "fresh Chromium extension profile with a real HTTP tab; drive the packaged popup and inspect chrome.storage.local"
+  },
+  {
+    "id": "keyboard-commands",
+    "claim": "The four packaged keyboard commands toggle the focus rail and reading lane or change bounded page zoom.",
+    "where": "README and shortcut sheet",
+    "test": "npm test -- --grep @claim:keyboard-commands",
+    "sandbox": "fresh HTTP page with the production page agent; dispatch all packaged manifest commands and assert visible state plus 80–200% zoom bounds"
   }
 ]
