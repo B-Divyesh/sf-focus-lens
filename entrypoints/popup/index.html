@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Focus Lens controls</title>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to controls</a>
+    <main id="main">
+      <header class="panel-header">
+        <div class="mark" aria-hidden="true"></div>
+        <div><p class="eyebrow">Focus Lens</p><h1>Keep your place</h1></div>
+      </header>
+      <p id="site-label" class="site-label">Connecting to this page…</p>
+      <div id="error" class="notice error" role="alert" hidden></div>
+
+      <section aria-labelledby="view-heading">
+        <h2 id="view-heading">Page view</h2>
+        <label class="range-label" for="zoom"><span>Zoom</span><output id="zoom-output">100%</output></label>
+        <input id="zoom" type="range" min="80" max="200" step="10" value="100" />
+        <fieldset>
+          <legend>Contrast</legend>
+          <div class="segmented">
+            <label><input type="radio" name="contrast" value="standard" checked />Standard</label>
+            <label><input type="radio" name="contrast" value="strong" />Strong</label>
+            <label><input type="radio" name="contrast" value="dim" />Dim</label>
+          </div>
+        </fieldset>
+      </section>
+
+      <section aria-labelledby="orientation-heading">
+        <h2 id="orientation-heading">Orientation</h2>
+        <label class="switch"><input id="focus-visible" type="checkbox" checked /><span>Show the focus rail</span></label>
+        <label class="switch"><input id="lane-visible" type="checkbox" /><span>Show the reading lane</span></label>
+        <label class="range-label" for="focus-width"><span>Focus rail width</span><output id="width-output">5 px</output></label>
+        <input id="focus-width" type="range" min="3" max="10" step="1" value="5" />
+        <label for="focus-color">Focus rail color</label>
+        <select id="focus-color">
+          <option value="#c63d2f">Coral</option>
+          <option value="#075d72">Mineral blue</option>
+          <option value="#7b2cbf">Violet</option>
+          <option value="#111111">Black</option>
+        </select>
+      </section>
+
+      <section aria-labelledby="waypoints-heading">
+        <h2 id="waypoints-heading">Named waypoints</h2>
+        <p class="help">Focus a page control. Name it here, then save it.</p>
+        <form id="waypoint-form">
+          <label for="waypoint-name">Waypoint name</label>
+          <div class="form-row"><input id="waypoint-name" maxlength="40" required /><button type="submit">Save focus</button></div>
+        </form>
+        <p id="empty-waypoints" class="empty">Saved controls for this site will appear here.</p>
+        <ul id="waypoint-list" class="waypoint-list"></ul>
+      </section>
+
+      <footer class="panel-footer">
+        <button id="export-shortcuts" class="secondary">Export shortcuts</button>
+        <span id="save-status" role="status" aria-live="polite">Settings save in this browser.</span>
+      </footer>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
