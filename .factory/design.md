@@ -4,7 +4,7 @@
 
 **Glacial minimal ceramics** turns an accessibility utility into a calm, legible instrument. Frosted white surfaces, ink-dark type, mineral blue controls, and a coral focus edge resemble glazed ceramic tools on pale ice. The hard coral ring is intentionally different from the quiet shell: it must remain visible over hostile web interfaces.
 
-This is a light-first, explicitly painted system. The extension also supports a dark panel selected by the user. The landing site stays light to preserve the ceramic direction.
+This is an explicitly light-only system. The pale ceramic ground is part of the product identity, while its ink text and controls maintain high contrast.
 
 ## Tokens
 

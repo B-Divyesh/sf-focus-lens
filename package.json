@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "vite --config site/vite.config.ts",
     "dev:extension": "wxt",
-    "build": "npm run build:extension && npm run build:site",
+    "build": "npm run build:site",
     "build:extension": "wxt build && node scripts/package-extension.mjs",
-    "build:site": "vite build --config site/vite.config.ts",
+    "build:site": "node scripts/clean-dist.mjs && npm run build:extension && npm run build:web",
+    "build:web": "vite build --config site/vite.config.ts",
     "test": "vitest run tests/settings.test.ts && playwright test",
     "test:unit": "vitest run tests/settings.test.ts",
     "test:e2e": "playwright test"
