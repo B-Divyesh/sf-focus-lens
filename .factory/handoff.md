@@ -49,13 +49,23 @@ Load `dist/extension` through Chrome's **Load unpacked** action for a manual too
 - Dependencies: `npm audit --audit-level=low` reports 0 vulnerabilities.
 - Budgets: site JavaScript 21,431 B; CSS 15,541 B; hero 38,506 B.
 - Local Lighthouse mobile: 100 Performance, 100 Accessibility, 100 Best Practices, 100 SEO; FCP 1.1 s, LCP 1.4 s, TBT 70 ms, CLS 0.
+- Live Lighthouse mobile: 100 Performance, 100 Accessibility, 100 Best Practices, 100 SEO; FCP 0.8 s, LCP 1.1 s, TBT 50 ms, CLS 0.
 - Local URL verifier: passed title, language, one `h1`, one `main`, alt text, button names, and console checks.
 - Visual evidence: `.factory/polish-artifacts/mobile-demo.png`, `desktop-home.png`, `desktop-demo.png`, `extension-popup.png`, and `not-found.png`.
 - Offline: not applicable because the extension makes no offline/PWA claim and the site has no service worker.
 
 ## Deployment and live recheck
 
-The production deployment and cold live verification are recorded in the final evidence commit for this work order.
+- Pushed `ce24e10` and `e20bef5` to `origin/main`.
+- Deployed `dist/site` to the existing in-scope `sf-focus-lens` Static Web App with the factory deployment script.
+- Cold-opened https://focus-lens.sociobot.in/?demo=1 at 390 × 844. Morgan Lee, Atlas CRM, Needs review, the 6 px rail, and reading lane are in the first screen.
+- Ran all 19 site/browser tests against production; all passed.
+- Ran the fleet URL verifier against production; title, language, landmarks, alt text, controls, and console checks passed.
+- Confirmed `/`, `/demo`, `/install`, `/privacy`, and `/terms` return 200. Unknown paths return the standard shell with HTTP 404.
+- Downloaded the live ZIP, passed its integrity check, and matched every extracted file to `dist/extension`.
+- Recorded only same-origin cold requests and zero console/page errors.
+- Confirmed immutable cache and security headers on the live hashed JavaScript.
+- Evidence is under `.factory/polish-artifacts/verify-live/` plus `live-mobile-demo.png`, `live-install.png`, `live-cold-check.json`, and `lighthouse-live.json`.
 
 ## Known gaps
 

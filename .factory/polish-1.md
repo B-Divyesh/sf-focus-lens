@@ -54,3 +54,15 @@ Every review finding is mapped below. Test names are from the committed Playwrig
 - Initial site payload: 21,431 B JavaScript, 15,541 B CSS, 38,506 B hero WebP.
 - Offline suite: not applicable. Focus Lens makes no offline/PWA claim and does not register a service worker.
 
+## Production recheck
+
+- Deployed `dist/site` to the existing `sf-focus-lens` Static Web App through `/opt/fleet/lib/deploy-static.sh focus-lens dist/site`.
+- `PLAYWRIGHT_BASE_URL=https://focus-lens.sociobot.in npx playwright test tests/e2e/site.spec.ts`: all 19 live tests passed.
+- `/opt/fleet/lib/verify-url.sh https://focus-lens.sociobot.in ...`: passed with zero console errors.
+- Cold `/?demo=1`: title and `h1` correct; Morgan Lee, Atlas CRM, Needs review, 6 px rail, and reading lane present within 390 × 844.
+- Cold request origins: only `https://focus-lens.sociobot.in`; console/page errors: none.
+- Live routes: `/`, `/demo`, `/install`, `/privacy`, and `/terms` return 200; an unknown route returns 404; ZIP returns 200 as `application/zip`.
+- Live ZIP integrity passed and extracted files match `dist/extension` exactly.
+- Live hashed JavaScript returns `public, max-age=31536000, immutable` plus CSP, `nosniff`, Referrer-Policy, and Permissions-Policy headers.
+- Live Lighthouse mobile: Performance 100, Accessibility 100, Best Practices 100, SEO 100; FCP 0.8 s, LCP 1.1 s, TBT 50 ms, CLS 0.
+- Live evidence: `.factory/polish-artifacts/live-mobile-demo.png`, `live-install.png`, `live-cold-check.json`, `lighthouse-live.json`, and `verify-live/verify.json`.

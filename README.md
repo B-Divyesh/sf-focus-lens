@@ -43,9 +43,10 @@ npm test
 npm run test:extension
 npm run build
 npm run test:clean-claims
+PLAYWRIGHT_BASE_URL=https://focus-lens.sociobot.in npx playwright test tests/e2e/site.spec.ts
 ```
 
-`npm test` runs unit, browser, accessibility, privacy, routing, and packaged-extension integration checks. `npm run test:extension` repeats the real-extension harness alone.
+`npm test` runs unit, browser, accessibility, privacy, routing, and packaged-extension integration checks. `npm run test:extension` repeats the real-extension harness alone. The final command repeats the site suite against production without starting a local server.
 
 Every command in `.factory/claims.json` runs from a clean clone. The harness supplies a real HTTP tab to the packaged popup. It also exercises the production page agent on that tab.
 

@@ -1,0 +1,28 @@
+{
+  "demo": {
+    "title": "Demo — Focus Lens",
+    "url": "https://focus-lens.sociobot.in/?demo=1",
+    "h1": "Adjust a busy page without losing focus",
+    "caseText": [
+      "Morgan Lee",
+      "Atlas CRM",
+      "Needs review"
+    ],
+    "searchOutline": "6px",
+    "lane": {
+      "x": 13,
+      "y": 652.375,
+      "width": 364,
+      "height": 96,
+      "top": 652.375,
+      "right": 377,
+      "bottom": 748.375,
+      "left": 13
+    },
+    "storage": []
+  },
+  "errors": [],
+  "origins": [
+    "https://focus-lens.sociobot.in"
+  ]
+}
