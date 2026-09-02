@@ -36,10 +36,31 @@
   },
   {
     "id": "local-private",
-    "claim": "Settings stay in your browser and the product makes no third-party runtime requests.",
+    "claim": "Demo settings stay in an isolated browser-storage key and Reset demo removes that key.",
     "where": "landing page, privacy page, and README",
     "test": "npm test -- --grep @claim:local-private",
-    "sandbox": "fresh browser context at /demo; record requests during settings and waypoint changes"
+    "sandbox": "fresh browser context at /demo; save a setting, inspect the demo namespace, then reset it"
+  },
+  {
+    "id": "no-egress",
+    "claim": "Focus Lens sends no data: after its local page loads, its controls make no network requests.",
+    "where": "privacy page and README",
+    "test": "npm test -- --grep @claim:no-egress",
+    "sandbox": "fresh browser context at /demo; record every request after load while changing settings, saving a waypoint, and exporting shortcuts"
+  },
+  {
+    "id": "no-page-text-capture",
+    "claim": "Waypoints store the name you enter and a control selector, never page text.",
+    "where": "landing privacy section, privacy page, and README",
+    "test": "npm test -- --grep @claim:no-page-text-capture",
+    "sandbox": "fresh browser context at /demo; place a unique marker in sample page text, save a differently named waypoint, and inspect stored data"
+  },
+  {
+    "id": "exact-permissions",
+    "claim": "The packaged extension requests only activeTab, scripting, and storage permissions.",
+    "where": "README",
+    "test": "npm test -- --grep @claim:exact-permissions",
+    "sandbox": "fresh browser context at /demo; inspect the manifest in the production extension directory and downloadable ZIP"
   },
   {
     "id": "no-account-free",

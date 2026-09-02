@@ -10,13 +10,14 @@ html { scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; background: var(--ice); }
 body::before { content: ""; position: fixed; inset: 0; z-index: -1; opacity: .28; background-image: radial-gradient(#78918e 0.6px, transparent 0.6px); background-size: 10px 10px; }
 a { color: #075468; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+a:not(.button) { display: inline-flex; align-items: center; min-height: 44px; }
 a:hover { text-decoration-thickness: 3px; }
 button, input { font: inherit; }
 button { cursor: pointer; }
 .skip-link { position: fixed; z-index: 20; left: 16px; top: -80px; padding: 12px 18px; background: var(--ink); color: white; border-radius: 8px; }
 .skip-link:focus { top: 16px; }
 .site-header { min-height: 80px; max-width: 1200px; margin: auto; padding: 16px clamp(20px, 5vw, 64px); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-.wordmark { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 800; text-decoration: none; }
+.wordmark { display: inline-flex; align-items: center; min-height: 44px; gap: 10px; color: var(--ink); font-weight: 800; text-decoration: none; }
 .wordmark-mark { width: 13px; height: 38px; border: 4px solid var(--coral); border-width: 0 4px; border-radius: 8px; transform: rotate(9deg); }
 .site-header nav { display: flex; align-items: center; gap: clamp(12px, 3vw, 28px); }
 .site-header nav a { min-height: 44px; display: inline-flex; align-items: center; color: var(--ink); font-weight: 650; }
@@ -91,6 +92,7 @@ legend { font-weight: 750; }
 .segment label { position: relative; min-height: 44px; padding: 9px 4px; border: 2px solid #718886; border-radius: 9px; text-align: center; text-transform: capitalize; font-size: .82rem; font-weight: 700; }
 .segment input { position: absolute; opacity: 0; }
 .segment label:has(input:checked) { background: var(--glacier-pale); border-color: var(--glacier); }
+.segment label:has(input:focus-visible) { outline: 4px solid var(--coral); outline-offset: 3px; box-shadow: 0 0 0 2px var(--ceramic); }
 .check-label { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 700; }
 .check-label input { width: 22px; height: 22px; accent-color: var(--glacier); }
 .demo-panel label[for="demo-waypoint"] { display: block; font-weight: 700; }

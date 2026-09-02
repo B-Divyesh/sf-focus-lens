@@ -89,7 +89,7 @@ function renderHome() {
 
       <section class="limits-section" aria-labelledby="limits-heading">
         <div><p class="kicker">Scope and privacy</p><h2 id="limits-heading">Your pages remain yours</h2></div>
-        <div class="limits-copy"><p>Focus Lens stores view settings and waypoint selectors in local browser storage.</p><p>It does not record page text, send analytics, replace a screen reader, or bypass site security.</p><p>Browser shortcuts can conflict with site shortcuts. You can change them in your extension settings.</p></div>
+        <div class="limits-copy"><p>Focus Lens stores view settings and waypoint selectors in local browser storage.</p><p>Waypoints use the name you enter and a control selector. They never store page text.</p><p>Browser shortcuts can conflict with site shortcuts. You can change them in your extension settings.</p></div>
       </section>
     </main>`);
   finishRoute('Keep your place in dense web apps');
@@ -188,7 +188,7 @@ function renderLegal(page: 'privacy' | 'terms') {
   document.title = title;
   setCanonical(`/${page}`);
   app.innerHTML = shell(`<main id="main" class="legal-page"><p class="kicker">${privacy ? 'Privacy' : 'Terms'}</p><h1 tabindex="-1">${privacy ? 'Your settings stay in your browser' : 'Use Focus Lens as an assistive tool'}</h1>
-    ${privacy ? `<h2>What Focus Lens stores</h2><p>The extension stores zoom, contrast, focus, reading lane, and named waypoint settings in local browser storage.</p><p>A waypoint contains the name you enter and a selector for the page control. Focus Lens does not store the page text.</p><h2>What leaves your browser</h2><p>Nothing. Focus Lens has no account, analytics, server, advertising, or third-party runtime request.</p><h2>How to remove your data</h2><p>Remove the extension or clear its storage in your browser extension settings.</p>` : `<h2>What the extension provides</h2><p>Focus Lens adds visual orientation controls to regular web pages. It is free and provided without a service guarantee.</p><h2>Your responsibility</h2><p>Keep your browser updated. Check important work before you submit it.</p><h2>Limits</h2><p>Focus Lens does not replace a screen reader, employer accommodation, or professional accessibility review. It does not bypass page security.</p>`}
+    ${privacy ? `<h2>What Focus Lens stores</h2><p>The extension stores zoom, contrast, focus, reading lane, and named waypoint settings in local browser storage.</p><p>A waypoint contains the name you enter and a selector for the page control. It never stores page text.</p><h2>What leaves your browser</h2><p>After its local page loads, Focus Lens controls make no network requests. No data leaves while you use them.</p><h2>How to remove your data</h2><p>Remove the extension or clear its storage in your browser extension settings.</p>` : `<h2>What the extension provides</h2><p>Focus Lens adds visual orientation controls to regular web pages. It is free and provided without a service guarantee.</p><h2>Your responsibility</h2><p>Keep your browser updated. Check important work before you submit it.</p><h2>Limits</h2><p>Focus Lens does not replace a screen reader, employer accommodation, or professional accessibility review. It does not bypass page security.</p>`}
     <h2>Questions</h2><p>Email <a href="mailto:hello@sociobot.in">hello@sociobot.in</a>.</p><p>Effective: September 2, 2026.</p></main>`, page);
   finishRoute(privacy ? 'Your settings stay in your browser' : 'Use Focus Lens as an assistive tool');
 }

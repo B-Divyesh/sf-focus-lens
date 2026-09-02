@@ -11,7 +11,7 @@ export default defineConfig({
     trace: 'retain-on-failure'
   },
   webServer: {
-    command: 'npm run build && npx vite preview --config site/vite.config.ts --host 127.0.0.1',
+    command: 'npm run build && node scripts/serve-static.mjs',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: false,
     timeout: 120_000

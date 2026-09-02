@@ -51,7 +51,8 @@ Audit date: 2026-09-02. Button labels, navigation labels, table cells, and field
 | Scope and privacy | 3 |
 | Your pages remain yours | 4 |
 | Focus Lens stores view settings and waypoint selectors in local browser storage. | 11 |
-| It does not record page text, send analytics, replace a screen reader, or bypass site security. | 16 |
+| Waypoints use the name you enter and a control selector. | 10 |
+| They never store page text. | 5 |
 | Browser shortcuts can conflict with site shortcuts. | 7 |
 | You can change them in your extension settings. | 8 |
 | Visible focus and keyboard orientation for dense web apps. | 9 |

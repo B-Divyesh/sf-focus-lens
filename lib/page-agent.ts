@@ -79,7 +79,9 @@ export function installFocusLens(): void {
       if (!active || active === document.body || active === document.documentElement) {
         sendResponse({ ok: false, error: 'Focus a control on the page, then try again.' });
       } else {
-        sendResponse({ ok: true, selector: selectorFor(active), label: active.getAttribute('aria-label') || active.textContent?.trim().slice(0, 50) || active.tagName.toLowerCase() });
+        // A waypoint deliberately contains only a structural selector. Its name
+        // comes from the person using Focus Lens, never from page text.
+        sendResponse({ ok: true, selector: selectorFor(active) });
       }
     }
     if (message.type === 'FOCUS_LENS_GOTO') {

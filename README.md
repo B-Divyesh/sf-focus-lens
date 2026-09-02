@@ -2,7 +2,7 @@
 
 Focus Lens is a free Chrome extension for low-vision knowledge workers who use dense browser applications. It adds a large focus rail, a temporary reading lane, per-site zoom and contrast settings, named keyboard waypoints, and an exportable shortcut sheet.
 
-All settings stay in Chrome extension storage. Focus Lens has no account, analytics, server, or runtime third-party request. It does not capture page text.
+All settings stay in Chrome extension storage. After its local page loads, Focus Lens controls make no network requests, so no data leaves while you use them. A waypoint stores the name you enter and a control selector, never page text.
 
 Try the isolated sample at [focus-lens.sociobot.in/demo](https://focus-lens.sociobot.in/demo). Demo changes use the separate `demo:focus-lens:settings` browser key and can be reset from the banner.
 

@@ -10,7 +10,7 @@ describe('release regression guards', () => {
     expect(JSON.stringify(tsconfig)).not.toContain('.wxt/tsconfig.json');
     expect(tsconfig.include).not.toContain('.wxt/**/*.d.ts');
     expect(packageJson.scripts.test).toContain('vitest run');
-    expect(claims).toHaveLength(7);
+    expect(claims).toHaveLength(10);
     for (const claim of claims) {
       expect(claim.test).toBe(`npm test -- --grep @claim:${claim.id}`);
     }
@@ -23,6 +23,36 @@ describe('release regression guards', () => {
       expect.objectContaining({ route: '/assets/*', headers: { 'Cache-Control': immutable } }),
       expect.objectContaining({ route: '/downloads/*', headers: { 'Cache-Control': immutable } })
     ]));
+  });
+
+  it('routes only known app pages through the SPA and leaves unknown paths for HTTP 404', async () => {
+    const config = JSON.parse(await readFile('site/public/staticwebapp.config.json', 'utf8'));
+    const routes = config.routes.filter((route: { rewrite?: string }) => route.rewrite === '/index.html').map((route: { route: string }) => route.route);
+
+    expect(config.navigationFallback).toBeUndefined();
+    expect(routes).toEqual(['/demo', '/privacy', '/terms', '/404']);
+    expect(config.responseOverrides['404']).toEqual({ rewrite: '/404.html' });
+  });
+
+  it('keeps waypoint capture structural so page text cannot enter extension storage', async () => {
+    const pageAgent = await readFile('lib/page-agent.ts', 'utf8');
+    const captureHandler = pageAgent.slice(pageAgent.indexOf("if (message.type === 'FOCUS_LENS_CAPTURE')"), pageAgent.indexOf("if (message.type === 'FOCUS_LENS_GOTO')"));
+
+    expect(captureHandler).toContain('selector: selectorFor(active)');
+    expect(captureHandler).not.toContain('textContent');
+    expect(captureHandler).not.toContain('innerText');
+    expect(captureHandler).not.toContain('aria-label');
+  });
+
+  it('keeps visible focus rules on both opacity-zero contrast control labels', async () => {
+    const siteStyles = await readFile('site/src/style.css', 'utf8');
+    const popupStyles = await readFile('entrypoints/popup/style.css', 'utf8');
+
+    expect(siteStyles).toContain('.segment label:has(input:focus-visible)');
+    expect(popupStyles).toContain('.segmented label:has(input:focus-visible)');
+    for (const styles of [siteStyles, popupStyles]) {
+      expect(styles).toContain('outline: 4px solid');
+    }
   });
 
   it('keeps both waypoint forms visibly required and able to announce recovery', async () => {
