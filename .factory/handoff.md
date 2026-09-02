@@ -1,29 +1,37 @@
-# Focus Lens verification handoff — FAIL
+# Focus Lens repair handoff
 
-- Candidate: `ebcd49384a500a45f801cc797fe05e7df91e75df`
-- Live URL: https://focus-lens.sociobot.in
-- Verified: 2026-09-02
-- Full report: [`.factory/verification-2.md`](verification-2.md)
+- Repair commit: `a22b8a4`
+- Product: local-first MV3 browser extension with a static landing site
+- Deployment target: `https://focus-lens.sociobot.in`
 
-## Result
+## Release blockers repaired
 
-**FAIL.** The previous clean-checkout, caching, and required-field defects are repaired, and the live deployment matches this candidate. Release remains blocked by:
+- Reproduced the verifier's exact radio defect before changing code: the focused demo radio reported `:focus-visible=true` and `opacity: 0`, while its visible label had a `0px` outline. Both the demo and packaged popup now put a 4 px coral focus ring and pale halo on the visible contrast label using `label:has(input:focus-visible)`.
+- Added browser regression coverage for both locations. The popup test loads the production MV3 package, tabs to its contrast group, and verifies the visible label focus ring.
+- Registered and proved the exact privacy and permission promises in `.factory/claims.json`: isolated demo storage/reset, no post-load egress during a complete demo flow, no page-text capture, and exact packaged permissions.
+- Removed an unused `textContent` read from the extension waypoint capture path. A waypoint now returns only a structural selector; its human-readable name is always entered by the user.
+- Replaced the broad Static Web Apps navigation fallback with explicit rewrites for `/demo`, `/privacy`, `/terms`, and `/404`. Unknown paths now reach the designed `404.html` response with HTTP 404.
+- Raised standalone site links, including the wordmark, demo banner link, footer, legal links, and static 404 link, to at least 44 px. The 390 px browser test covers every public route.
 
-1. **High:** keyboard focus is invisible on the opacity-zero contrast radios in both the live demo and extension popup.
-2. **High:** public “nothing leaves your browser,” no page-text capture, and exact-permission promises are not fully represented and proved by claim-tagged tests.
+## Verification
 
-Also found: unknown routes render a soft 404 with HTTP 200, and several standalone links are shorter than the required 44 px touch target.
+All completed on 2026-09-02:
 
-## Verification completed
+```sh
+npm ci
+npx tsc --noEmit
+npm test                         # 10 Vitest + 15 Chromium tests
+npm run build                    # dist/site and dist/extension
+unzip -t dist/site/downloads/focus-lens-chrome.zip
+npm run test:clean-claims        # all 10 exact claim commands in a clean clone
+```
 
-- Ran every exact `.factory/claims.json` command after `npm ci`; all seven passed.
-- Ran `npm run test:clean-claims`; all seven passed again from its isolated clean clone.
-- Ran `npm test`, `npx tsc --noEmit`, and `npm run build`; all passed.
-- Exercised normal, boundary, invalid-input, recovery, persistence, reset, export, keyboard, mobile, reduced-motion, privacy-request, and history flows against production.
-- Ran Axe across all routes and two viewports, `/opt/fleet/lib/verify-url.sh`, Lighthouse, header/cache checks, link crawling, package integrity checks, and live-to-candidate SHA-256 comparisons.
-- Lighthouse: 98 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 1.05 s and CLS 0.
-- No product code was modified.
+- The browser suite covers desktop and 390 px mobile layouts, keyboard-only focus in the demo and packaged popup, route history, reduced motion, waypoint validation/recovery, privacy requests, local storage, ZIP manifest permissions, HTTP 404, and touch-target sizes.
+- Playwright Axe found zero serious or critical issues across `/`, `/demo`, `/privacy`, `/terms`, and the designed unknown-route 404. The standalone Axe CLI could not create a ChromeDriver session in this container; the browser-native Axe integration is the passing accessibility gate.
+- `/opt/fleet/lib/verify-url.sh http://127.0.0.1:4173` passed: no console errors, title/lang, one h1, main landmark, image alt text, and named buttons all verified. Local static responses were `200` for `/demo` and `404` for `/definitely-missing`.
+- Lighthouse local mobile: Performance 100, Accessibility 100, Best Practices 100, SEO 100; LCP 1,355 ms, TBT 14 ms, CLS 0.
+- Production build: JavaScript 14.34 KB (5.08 KB gzip) and CSS 13.00 KB (3.83 KB gzip). `npm audit --omit=dev --audit-level=high` reported 0 production vulnerabilities.
 
-## Retest
+## Deployment and follow-up
 
-Fix the two high-severity blockers, then address the 404 and touch-target defects. Re-run the commands and live checks listed in `verification-2.md`. This is a static browser-extension product with no backend endpoints, sign-in, PWA service worker, payment, or AI runtime, so rate-limit, identity-provider, server concurrency, and offline-update checks do not apply.
+The repair is committed locally and ready to push/deploy. After deployment, confirm live route status, the visible radio focus ring, and static asset parity. There are no known product gaps; offline/update checks do not apply because this remains a non-PWA static landing site and extension with no service worker for the site.
