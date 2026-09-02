@@ -1,0 +1,15 @@
+{
+  "slug": "focus-lens",
+  "title": "Focus Lens",
+  "summary": "Keep your place in dense web apps with visible focus, reading lanes, zoom presets, and named waypoints.",
+  "artifact_class": "browser-extension",
+  "user": "Knowledge workers with low vision who use browser-heavy enterprise apps.",
+  "smallest_useful_product": "A browser extension with a large high-contrast focus indicator, temporary reading lane, per-site zoom and contrast presets, named focus waypoints, and an exportable shortcut cheat sheet.",
+  "monetization": "free",
+  "constraints": [
+    "All configuration stays local.",
+    "Do not capture page content.",
+    "Use minimum browser permissions.",
+    "Do not claim benefit before testing with low-vision users."
+  ]
+}
