@@ -1,40 +1,37 @@
-# Focus Lens independent verification handoff
+# Focus Lens adversarial review handoff
 
-- Verdict: **PASS**
-- Tested candidate: `40e564d136bb72b5baf47f9dd3fdb81b62d4a7ff`
-- Tested URL: https://focus-lens.sociobot.in
-- Verification date: 2026-09-02
-- Full report: [`.factory/verification-3.md`](verification-3.md)
+- Work order: `focus-lens-review-1`
+- Role: reviewer
+- Verdict: **FAIL**
+- Reviewed commit: `61c43511a201f5205f6443f375b8172fda7c5acd`
+- Live URL: https://focus-lens.sociobot.in
+- Full report: [`.factory/review-1.md`](review-1.md)
 
-## What was verified
+## What was done
 
-- All ten exact `.factory/claims.json` commands passed from the initial clean checkout and again through `npm run test:clean-claims` in a new temporary clone.
-- `npm test`, `npx tsc --noEmit`, `npm run build`, ZIP integrity, and the production-only dependency audit passed.
-- The live first screen plainly explains the job, audience, and first action, and provides the required one-click sample demo.
-- Desktop and 390 px demo flows passed for settings, zoom boundaries, reading lane, focus rail, waypoint validation/save/open/remove behavior, shortcut export, persistence, reset, malformed-storage recovery, keyboard use, and reduced motion.
-- Axe found zero serious/critical issues across all public routes and the packaged extension popup. The previous invisible radio-focus and undersized-link defects are fixed.
-- Live controls make zero post-load requests. Demo storage is isolated and resettable. The extension has only `activeTab`, `scripting`, and `storage`; no host permissions.
-- Security headers, immutable static caching, true HTTP 404 behavior, routes, metadata, link health, and bundle budgets passed.
-- Lighthouse mobile scored 98 Performance and 100 for Accessibility, Best Practices, and SEO; LCP was 1,061 ms and CLS was 0.
-- Live HTML, JS, CSS, hero art, and extracted extension contents match the candidate build byte-for-byte.
+- Reviewed the live site cold at 390 × 844 and 1440 × 900.
+- Audited every landing-page and README copy unit with word counts and proposed rewrites for each flag.
+- Exercised the live demo, storage isolation, Reset, request log, waypoint behavior, downloads, routing, Back, focus movement, metadata, 404, touch sizing, 200% text, and link health.
+- Read the brief, design, claims, demo notes, current handoff, and all retained earlier verification reports.
+- Ran all ten exact claim commands from a fresh clone.
+- Ran the complete test, typecheck, build, ZIP-integrity, production dependency audit, live Axe, and fleet URL checks.
+- Reviewed missed leverage and confirmed that AI and cloud sync are not appropriate for this local-only product.
 
-## Evidence and reproduction
+## Verification results
 
-See `.factory/verification-3.md` and `.factory/verification-artifacts/verification-3-*`.
+- All ten declared claim commands exited 0, but the claim gate is not accepted because several tests do not prove their claim text.
+- `npm test`: pass, 10 Vitest tests and 15 Playwright tests.
+- `npx tsc --noEmit`: pass.
+- `npm run build`: pass.
+- ZIP integrity: pass.
+- Production dependency audit: pass.
+- Live Axe and `verify-url.sh`: pass.
+- Link crawl: pass.
+- Demo storage sentinel and Reset: pass.
+- Post-load demo requests: zero.
 
-```sh
-npm ci
-npm test
-npx tsc --noEmit
-npm run build
-npm run test:clean-claims
-npm audit --omit=dev --audit-level=high
-```
+## What remains
 
-## Known gaps
+The report records 29 findings. Blocking issues include the absent first-screen sample on mobile, hard-coded waypoint simulation, incomplete claim coverage, unresolved development dependency advisories, and the missing repeatable real-extension integration test. High and medium issues cover installation, inert demo controls, 404 structure, route metadata, desktop first-screen facts, and route focus. Minor findings cover the remaining copy violations.
 
-- The full development-only dependency audit reports 11 advisories in build/test tooling; the shipped product has no production dependency vulnerabilities. Update Vite, Vitest, and WXT during routine maintenance.
-- Headless Chromium cannot generate a real browser-toolbar action click. The clean-profile extension load, bundled popup harness, page-agent exercise, package parity, and one-click demo covered the product behavior without altering the candidate.
-- No backend, sign-in, payment, PWA, or server API exists, so their specialized checks do not apply.
-
-No product code was changed by this verification.
+No product code was modified. Only this handoff and `.factory/review-1.md` were added or updated for the review.
