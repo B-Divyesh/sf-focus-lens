@@ -1,44 +1,40 @@
-# Focus Lens repair handoff
+# Focus Lens independent verification handoff
 
-- Repair commit: `a22b8a4`
-- Product: local-first MV3 browser extension with a static landing site
-- Deployment target: `https://focus-lens.sociobot.in`
+- Verdict: **PASS**
+- Tested candidate: `40e564d136bb72b5baf47f9dd3fdb81b62d4a7ff`
+- Tested URL: https://focus-lens.sociobot.in
+- Verification date: 2026-09-02
+- Full report: [`.factory/verification-3.md`](verification-3.md)
 
-## Release blockers repaired
+## What was verified
 
-- Reproduced the verifier's exact radio defect before changing code: the focused demo radio reported `:focus-visible=true` and `opacity: 0`, while its visible label had a `0px` outline. Both the demo and packaged popup now put a 4 px coral focus ring and pale halo on the visible contrast label using `label:has(input:focus-visible)`.
-- Added browser regression coverage for both locations. The popup test loads the production MV3 package, tabs to its contrast group, and verifies the visible label focus ring.
-- Registered and proved the exact privacy and permission promises in `.factory/claims.json`: isolated demo storage/reset, no post-load egress during a complete demo flow, no page-text capture, and exact packaged permissions.
-- Removed an unused `textContent` read from the extension waypoint capture path. A waypoint now returns only a structural selector; its human-readable name is always entered by the user.
-- Replaced the broad Static Web Apps navigation fallback with explicit rewrites for `/demo`, `/privacy`, `/terms`, and `/404`. Unknown paths now reach the designed `404.html` response with HTTP 404.
-- Raised standalone site links, including the wordmark, demo banner link, footer, legal links, and static 404 link, to at least 44 px. The 390 px browser test covers every public route.
+- All ten exact `.factory/claims.json` commands passed from the initial clean checkout and again through `npm run test:clean-claims` in a new temporary clone.
+- `npm test`, `npx tsc --noEmit`, `npm run build`, ZIP integrity, and the production-only dependency audit passed.
+- The live first screen plainly explains the job, audience, and first action, and provides the required one-click sample demo.
+- Desktop and 390 px demo flows passed for settings, zoom boundaries, reading lane, focus rail, waypoint validation/save/open/remove behavior, shortcut export, persistence, reset, malformed-storage recovery, keyboard use, and reduced motion.
+- Axe found zero serious/critical issues across all public routes and the packaged extension popup. The previous invisible radio-focus and undersized-link defects are fixed.
+- Live controls make zero post-load requests. Demo storage is isolated and resettable. The extension has only `activeTab`, `scripting`, and `storage`; no host permissions.
+- Security headers, immutable static caching, true HTTP 404 behavior, routes, metadata, link health, and bundle budgets passed.
+- Lighthouse mobile scored 98 Performance and 100 for Accessibility, Best Practices, and SEO; LCP was 1,061 ms and CLS was 0.
+- Live HTML, JS, CSS, hero art, and extracted extension contents match the candidate build byte-for-byte.
 
-## Verification
+## Evidence and reproduction
 
-All completed on 2026-09-02:
+See `.factory/verification-3.md` and `.factory/verification-artifacts/verification-3-*`.
 
 ```sh
 npm ci
+npm test
 npx tsc --noEmit
-npm test                         # 10 Vitest + 15 Chromium tests
-npm run build                    # dist/site and dist/extension
-unzip -t dist/site/downloads/focus-lens-chrome.zip
-npm run test:clean-claims        # all 10 exact claim commands in a clean clone
+npm run build
+npm run test:clean-claims
+npm audit --omit=dev --audit-level=high
 ```
 
-- The browser suite covers desktop and 390 px mobile layouts, keyboard-only focus in the demo and packaged popup, route history, reduced motion, waypoint validation/recovery, privacy requests, local storage, ZIP manifest permissions, HTTP 404, and touch-target sizes.
-- Playwright Axe found zero serious or critical issues across `/`, `/demo`, `/privacy`, `/terms`, and the designed unknown-route 404. The standalone Axe CLI could not create a ChromeDriver session in this container; the browser-native Axe integration is the passing accessibility gate.
-- `/opt/fleet/lib/verify-url.sh http://127.0.0.1:4173` passed: no console errors, title/lang, one h1, main landmark, image alt text, and named buttons all verified. Local static responses were `200` for `/demo` and `404` for `/definitely-missing`.
-- Lighthouse local mobile: Performance 100, Accessibility 100, Best Practices 100, SEO 100; LCP 1,355 ms, TBT 14 ms, CLS 0.
-- Production build: JavaScript 14.34 KB (5.08 KB gzip) and CSS 13.00 KB (3.83 KB gzip). `npm audit --omit=dev --audit-level=high` reported 0 production vulnerabilities.
+## Known gaps
 
-## Deployment and follow-up
+- The full development-only dependency audit reports 11 advisories in build/test tooling; the shipped product has no production dependency vulnerabilities. Update Vite, Vitest, and WXT during routine maintenance.
+- Headless Chromium cannot generate a real browser-toolbar action click. The clean-profile extension load, bundled popup harness, page-agent exercise, package parity, and one-click demo covered the product behavior without altering the candidate.
+- No backend, sign-in, payment, PWA, or server API exists, so their specialized checks do not apply.
 
-Deployed to the existing `sf-focus-lens` Static Web App on 2026-09-02. Live checks at `https://focus-lens.sociobot.in` confirmed:
-
-- `/demo` returns HTTP 200 and an unknown path returns the designed static document with HTTP 404.
-- The live demo's opacity-zero Strong radio has `:focus-visible=true`; its visible label computes a 4 px `rgb(198, 61, 47)` outline. There were no browser console errors.
-- At 390 px, the demo has no horizontal overflow and every visible standalone link is at least 44 px high.
-- Live JS, CSS, and the downloadable ZIP have exact SHA-256 matches with the local production build. The deployed CSP, referrer policy, nosniff header, and immutable asset caching are present.
-
-There are no known product gaps. Offline/update checks do not apply because this remains a non-PWA static landing site and extension with no site service worker.
+No product code was changed by this verification.
